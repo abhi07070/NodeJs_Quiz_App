@@ -22,7 +22,7 @@ This is a simple quiz application built with Node.js and HTML/JavaScript. It tes
 2. Install dependencies using `npm install`.
 3. Start the server using `node index.js`.
 4. Open `http://localhost:3100` in your web browser to access the quiz.
-5. Go to the `index.html` file and initiate this file to display questions on the browsers
+5. Go to the `index.html` file and initiate this file to display questions on the browser
 
 ## How to Play
 
