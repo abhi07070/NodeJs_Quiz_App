@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Node.js Quiz</title>
+    <style>
+      /* CSS styles for the quiz page */
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        margin: auto 100px;
+      }
+      h1 {
+        text-align: center;
+        padding: 2rem 0;
+      }
+      p {
+        text-align: center;
+        font-weight: 500;
+        font-size: 1.5rem;
+      }
+      #instructions {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        padding: 2rem;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .questions {
+        padding: 1.5rem 0;
+      }
+
+      .questions li {
+        padding: 0.3rem 0;
+        list-style: none;
+      }
+
+      .questions li input {
+        cursor: pointer;
+      }
+
+      .feedback,
+      .feedback li {
+        padding: 0.3rem 0;
+      }
+
+      button {
+        color: #fff;
+        background-color: #000;
+        outline: none;
+        padding: 0.5rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Node.js Quiz</h1>
+    <div id="instructions">
+      <!-- Instructions for the quiz -->
+      <p>
+        Welcome to the Node.js Quiz! This quiz will test your knowledge of
+        Node.js concepts. Answer each question to the best of your ability.
+        Click the "Start Quiz" button to begin.
+      </p>
+      <button class="btn" onclick="startQuiz()">Start Quiz</button>
+    </div>
+    <div id="quiz" style="display: none"></div>
+    <button id="nextButton" onclick="nextQuestion()" style="display: none">
+      Next
+    </button>
+    <div id="result"></div>
+
+    <script>
+      let quizData;
+      let currentQuestionIndex = 0;
+      let answers = [];
+      let quizFinished = false;
+
+      async function fetchQuiz() {
+        // Fetch quiz questions from the server
+        const response = await fetch("http://localhost:3100/quiz");
+        quizData = await response.json();
+        displayQuestion();
+      }
+
+      function startQuiz() {
+        // Hide the instructions and display the quiz
+        document.getElementById("instructions").style.display = "none";
+        document.getElementById("quiz").style.display = "block";
+        document.getElementById("nextButton").style.display = "block";
+        fetchQuiz(); // Fetch the quiz questions
+      }
+
+      function displayQuestion() {
+        // Display the current question
+        const question = quizData[currentQuestionIndex];
+        const quizDiv = document.getElementById("quiz");
+        quizDiv.innerHTML = `
+                <h2><strong>Question ${currentQuestionIndex + 1}:</strong> ${
+          question.question
+        }</h2>
+                <ul class="questions">
+                    ${question.options
+                      .map(
+                        (option) =>
+                          `<li><input type="radio" name="q" value="${option}">${option}</li>`
+                      )
+                      .join("")}
+                </ul>
+            `;
+      }
+
+      function nextQuestion() {
+        // Move to the next question
+        if (quizFinished) {
+          return;
+        }
+
+        const selectedOption = document.querySelector(
+          'input[name="q"]:checked'
+        );
+        if (!selectedOption) {
+          alert("Please select an answer.");
+          return;
+        }
+
+        answers.push(selectedOption.value);
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex < quizData.length) {
+          displayQuestion();
+        } else {
+          submitQuiz();
+        }
+      }
+
+      async function submitQuiz() {
+        // Submit the quiz answers to the server
+        const response = await fetch("http://localhost:3100/submit-quiz", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ answers }),
+        });
+
+        const result = await response.json();
+        displayResult(result);
+      }
+
+      function displayResult(result) {
+        // Display the quiz result
+        quizFinished = true;
+
+        const quizDiv = document.getElementById("quiz");
+        quizDiv.style.display = "none";
+
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `
+                <h2>Quiz Result</h2>
+                <p>Your score: ${result.score}</p>
+                <h3>Feedback:</h3>
+                <ul class="feedback">
+                    ${result.feedback
+                      .map(
+                        (item, i) => `<li><strong>Question ${
+                          i + 1
+                        } :</strong> ${item.question}<br>
+                    <strong>Your Answer:</strong> ${item.userAnswer}<br>
+                    <strong>Correct Answer:</strong> ${item.correctAnswer}<br>
+                    <strong>Result:</strong> ${
+                      item.isCorrect ? "Correct" : "Incorrect"
+                    }</li>`
+                      )
+                      .join("")}
+                </ul>
+                <button onclick="restartQuiz()">Restart Quiz</button>
+            `;
+        resultDiv.style.display = "block";
+        document.getElementById("nextButton").style.display = "none"; // Hide the next button
+      }
+
+      function restartQuiz() {
+        // Restart the quiz
+        currentQuestionIndex = 0;
+        answers = [];
+        quizFinished = false;
+        document.getElementById("quiz").style.display = "block";
+        document.getElementById("result").style.display = "none";
+        document.getElementById("nextButton").style.display = "block";
+        displayQuestion();
+      }
+
+      // Fetch the quiz questions when the page loads
+      fetchQuiz();
+    </script>
+  </body>
+</html>

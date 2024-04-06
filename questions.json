@@ -1,0 +1,67 @@
+[
+  {
+    "question": "What does Node.js use to manage asynchronous operations?",
+    "options": ["Promises", "Callbacks", "Async/Await", "All of the above"],
+    "correctAnswer": "All of the above"
+  },
+  {
+    "question": "Which module in Node.js is used for file-based input and output operations?",
+    "options": ["fs", "http", "path", "url"],
+    "correctAnswer": "fs"
+  },
+  {
+    "question": "What is the main purpose of the Node.js buffer class?",
+    "options": [
+      "To handle binary data",
+      "To handle JSON data",
+      "To handle XML data",
+      "To handle text data"
+    ],
+    "correctAnswer": "To handle binary data"
+  },
+  {
+    "question": "Which of the following is a popular Node.js web framework?",
+    "options": ["Express.js", "AngularJS", "React", "Vue.js"],
+    "correctAnswer": "Express.js"
+  },
+  {
+    "question": "In Node.js, which keyword is used to import modules?",
+    "options": ["import", "require", "export", "module"],
+    "correctAnswer": "require"
+  },
+  {
+    "question": "What is the event-driven programming paradigm in Node.js based on?",
+    "options": ["Callbacks", "Promises", "Events", "Async/Await"],
+    "correctAnswer": "Events"
+  },
+  {
+    "question": "Which of the following is NOT a core module in Node.js?",
+    "options": ["http", "fs", "path", "mysql"],
+    "correctAnswer": "mysql"
+  },
+  {
+    "question": "What does REPL stand for in the context of Node.js?",
+    "options": [
+      "Read Evaluate Print Loop",
+      "Run Execute Process Loop",
+      "Repeat Execute Print Loop",
+      "None of the above"
+    ],
+    "correctAnswer": "Read Evaluate Print Loop"
+  },
+  {
+    "question": "Which command is used to install dependencies in a Node.js project?",
+    "options": ["npm install", "npm start", "npm run", "npm init"],
+    "correctAnswer": "npm install"
+  },
+  {
+    "question": "What is the purpose of the 'package.json' file in a Node.js project?",
+    "options": [
+      "To store metadata about the project",
+      "To store configuration settings",
+      "To list project dependencies",
+      "All of the above"
+    ],
+    "correctAnswer": "All of the above"
+  }
+]
